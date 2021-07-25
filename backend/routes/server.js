@@ -177,12 +177,19 @@ router.get("/source/:version", (req, res, next) => {
 });
 //version
 router.post("/", (req, res, next) => {
+  var selectedVersion = req.body.version;
+  if (selectedVersion == "latest_release") {
+    selectedVersion = versions.latest.release;
+  } else if (selectedVersion == "latest_snapshot") {
+    selectedVersion = versions.latest.snapshot;
+  };
   var newServer = {
     name: req.body.name,
-    version: req.body.version,
+    version: selectedVersion,
     gamemode: req.body.gamemode,
     difficulty: req.body.difficulty,
-
+    whitelist:req.body.whitelist,
+    max:req.body.max
   };
   savedServers.push(newServer);
   updateServers();

@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build --base-href ./",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "nodemon":"nodemon web_server.js --ignore server --ignore backend/servers.json --ignore server_files"
   },
   "main": "main.js",
   "private": true,

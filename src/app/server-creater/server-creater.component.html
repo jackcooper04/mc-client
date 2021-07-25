@@ -1,0 +1,38 @@
+<div [formGroup]="form">
+  <mat-form-field appearance="fill">
+    <mat-label>Input</mat-label>
+    <mat-error *ngIf="showError">Please Add A Name</mat-error>
+    <input matInput formControlName="name" required>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Select</mat-label>
+    <mat-select formControlName="gamemode" required>
+      <mat-option value="creative">creative</mat-option>
+      <mat-option value="survival">survival</mat-option>
+      <mat-option value="adventure">adventure</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Select</mat-label>
+    <mat-select formControlName="difficulty" required>
+      <mat-option value="peaceful">peaceful</mat-option>
+      <mat-option value="easy">easy</mat-option>
+      <mat-option value="normal">normal</mat-option>
+      <mat-option value="hard">hard</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Select</mat-label>
+    <mat-select formControlName="version" required>
+      <mat-option value="latest_release">latest</mat-option>
+      <mat-option value="latest_snapshot">snapshot</mat-option>
+      <mat-option value="1.7.10">1.17.10</mat-option>
+      <mat-option value="1.16">1.16</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</div>
+<button mat-button color="primary" (click)="submit()">Submit</button>
+<p >Click Me</p>
+<p>Status: {{form.status}}</p>
+
