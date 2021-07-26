@@ -10,6 +10,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "publish": "electron-forge publish",
+    "make": "electron-forge make",
     "nodemon": "nodemon web_server.js --ignore server --ignore backend/servers.json --ignore server_files"
   },
   "main": "main.js",
