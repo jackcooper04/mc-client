@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ServerService } from '../server.service';
 
 @Component({
   selector: 'app-server-creater',
@@ -15,9 +16,13 @@ export class ServerCreaterComponent implements OnInit {
     difficulty:new FormControl('peaceful'),
     version:new FormControl('latest_release')
   });
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, public serverService:ServerService) { }
 
   ngOnInit(): void {
+  }
+  onValueChange(event:any){
+    this.serverService.sourceVersion(event)
+    console.log(event)
   }
   submit(){
     if (this.form.valid){
@@ -30,10 +35,7 @@ export class ServerCreaterComponent implements OnInit {
         "max":20,
         "whitelist":false
       }
-      this.http.post("http://localhost:8081/api/server",obj)
-      .subscribe(responseData => {
-        console.log(responseData)
-      })
+      this.serverService.addServer(obj);
 
     } else {
       this.showError = true;

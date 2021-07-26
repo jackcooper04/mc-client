@@ -23,7 +23,7 @@
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Select</mat-label>
-    <mat-select formControlName="version" required>
+    <mat-select formControlName="version" required (valueChange)="onValueChange($event)">
       <mat-option value="latest_release">latest</mat-option>
       <mat-option value="latest_snapshot">snapshot</mat-option>
       <mat-option value="1.7.10">1.17.10</mat-option>

@@ -1,13 +1,16 @@
 {
   "name": "mc-client",
   "version": "0.0.0",
+  "author": "Jack Cooper",
+  "description": "MC Client",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --base-href ./",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "nodemon":"nodemon web_server.js --ignore server --ignore backend/servers.json --ignore server_files"
+    "publish": "electron-forge publish",
+    "nodemon": "nodemon web_server.js --ignore server --ignore backend/servers.json --ignore server_files"
   },
   "main": "main.js",
   "private": true,
@@ -39,6 +42,7 @@
     "@types/jasmine": "~3.8.0",
     "@types/node": "^12.11.1",
     "electron": "^13.1.7",
+    "electron-wix-msi": "^3.2.0",
     "jasmine-core": "~3.8.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",

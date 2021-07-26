@@ -8,12 +8,14 @@ import { HeaderComponent } from './header/header.component';
 import { ServerCreaterComponent } from './server-creater/server-creater.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { ServerListComponent } from './server-list/server-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    ServerCreaterComponent
+    ServerCreaterComponent,
+    ServerListComponent
   ],
   imports: [
     BrowserModule,
