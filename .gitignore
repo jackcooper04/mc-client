@@ -50,3 +50,5 @@ out
 
 backend/servers.json
 mcClient-win32-x64
+mc-client
+buildInstaller.js

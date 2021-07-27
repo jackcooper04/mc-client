@@ -7,9 +7,9 @@ const path = require('path');
 // 2. Define input and output directory.
 // Important: the directories must be absolute, not relative e.g
 // appDirectory: "C:\\Users\sdkca\Desktop\OurCodeWorld-win32-x64",
-const APP_DIR = path.resolve(__dirname, './mcClient-win32-x64');
+const APP_DIR = path.resolve(__dirname, './mc-client');
 // outputDirectory: "C:\\Users\sdkca\Desktop\windows_installer",
-const OUT_DIR = path.resolve(__dirname, './windows_installer');
+const OUT_DIR = "C:\\Users\\jack\\Desktop\\window_installer";
 
 // 3. Instantiate the MSICreator
 const msiCreator = new MSICreator({
@@ -18,7 +18,7 @@ const msiCreator = new MSICreator({
 
     // Configure metadata
     description: 'Manger for minecraft server',
-    exe: 'mcClient',
+    exe: 'mc-client',
     name: 'Minecraft Server Client',
     manufacturer: 'Jack Cooper Projects',
     appIconPath:"C:\\Users\\jack\\Documents\\main-projects\\mc-client\\test.ico",

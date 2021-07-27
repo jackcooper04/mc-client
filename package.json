@@ -50,6 +50,7 @@
     "@electron-forge/maker-deb": "^6.0.0-beta.59",
     "@electron-forge/maker-rpm": "^6.0.0-beta.59",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.59",
+    "@electron-forge/maker-wix": "^6.0.0-beta.59",
     "@electron-forge/maker-zip": "^6.0.0-beta.59",
     "@electron-forge/publisher-github": "^6.0.0-beta.59",
     "@types/jasmine": "~3.8.0",
@@ -83,22 +84,9 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "mc_client"
+            "name": "mc-client"
           }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
+
         }
       ]
     }
