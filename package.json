@@ -37,6 +37,7 @@
     "morgan": "^1.10.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
+    "update-electron-app": "^2.0.1",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

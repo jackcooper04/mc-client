@@ -1,15 +1,9 @@
 
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, autoUpdater} = require('electron')
+const {app, BrowserWindow} = require('electron')
 const path = require('path')
 const webServer = require('./web_server');
-const server = "https://mc-client-updater-qtxoapkcg-jackcooper04.vercel.app";
-const url =  `${server}/update/${process.platform}/${app.getVersion()}`;
-console.log(url)
-autoUpdater.setFeedURL({url});
-setInterval(() => {
-  autoUpdater.checkForUpdates()
-}, 60000)
+require('update-electron-app')()
 function createWindow () {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
