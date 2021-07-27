@@ -47,3 +47,5 @@ Thumbs.db
 server_files
 server
 out
+
+backend/servers.json
