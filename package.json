@@ -3,6 +3,7 @@
   "version": "0.13.0",
   "author": "Jack Cooper",
   "description": "MC Client",
+  "repository": "https://github.com/jackcooper04/mc-client",
   "scripts": {
     "ng": "ng",
     "start": "electron-forge start",
