@@ -12,7 +12,8 @@
     "publish": "electron-forge publish",
     "make": "electron-forge make",
     "nodemon": "nodemon web_server.js --ignore server --ignore backend/servers.json --ignore server_files",
-    "package": "electron-forge package"
+    "package": "electron-forge package",
+    "push":"npm version minor && git push --follow-tags"
   },
   "main": "main.js",
   "private": true,
