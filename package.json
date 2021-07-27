@@ -1,6 +1,6 @@
 {
   "name": "mc-client",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": "Jack Cooper",
   "description": "MC Client",
   "scripts": {
@@ -71,7 +71,7 @@
               "owner": "jackcooper04",
               "name": "mc-client"
             },
-            "draft":true
+            "draft": true
           }
         }
       ],
