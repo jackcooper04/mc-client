@@ -14,6 +14,7 @@
     "make": "electron-forge make",
     "nodemon": "nodemon web_server.js --ignore server --ignore backend/servers.json --ignore server_files",
     "package": "electron-forge package",
+    "reset":"echo [] > backend/servers.json",
     "push": "npm version minor && git push --follow-tags"
   },
   "main": "main.js",
