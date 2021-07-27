@@ -6,6 +6,9 @@ const webServer = require('./web_server');
 const server = "https://mc-client-updater-qtxoapkcg-jackcooper04.vercel.app";
 const url =  `${server}/update/${process.platform}/${app.getVersion()}`;
 autoUpdater.setFeedURL({url});
+setInterval(() => {
+  autoUpdater.checkForUpdates()
+}, 60000)
 function createWindow () {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
