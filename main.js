@@ -2,6 +2,8 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
 const path = require('path');
+
+const fs = require('fs');
 var rimraf = require("rimraf");
 const webServer = require('./web_server');
 require('update-electron-app')();
