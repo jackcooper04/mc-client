@@ -4,10 +4,11 @@ const axios = require('axios');
 const path = require('path');
 const fs = require('fs');
 const Rcon = require('modern-rcon');
+const homedir = require('os').homedir();
 const { exec } = require("child_process");
 
 //Import Files
-const savedServers = require('../servers.json');
+
 var serverProperties = ''
 fs.readFile(path.join(__dirname, '../templates/server.properties'), 'utf8', (err, data) => {
   if (err) {
@@ -20,21 +21,30 @@ fs.readFile(path.join(__dirname, '../templates/server.properties'), 'utf8', (err
 //Initalise Packages
 const router = express.Router();
 const rcon = new Rcon('localhost','**58powerTHINKheight42**');
-
+console.log(path.join(homedir,'Documents','MC_Server_Files','server'))
 //Directory Checks
-if (!fs.existsSync(path.join(__dirname, '../../server'))) {
-  fs.mkdirSync(path.join(__dirname, '../../server'));
+if (!fs.existsSync(path.join(homedir,'Documents','MC_Server_Files'))){
+  fs.mkdirSync(path.join(homedir,'Documents','MC_Server_Files'))
+};
+if (!fs.existsSync(path.join(homedir,'Documents','MC_Server_Files','configs'))){
+  fs.mkdirSync(path.join(homedir,'Documents','MC_Server_Files','configs'))
+};
+if (!fs.existsSync(path.join(homedir,'Documents','MC_Server_Files','server'))) {
+  fs.mkdirSync(path.join(homedir,'Documents','MC_Server_Files','server'));
 
-  fs.writeFileSync(path.join(__dirname, '../../server/eula.txt'), '');
-  fs.writeFileSync(path.join(__dirname, '../../server/eula.txt'), 'eula=true');
+  fs.writeFileSync(path.join(homedir,'Documents','MC_Server_Files','server','eula.txt'), '');
+  fs.writeFileSync(path.join(homedir,'Documents','MC_Server_Files','server','eula.txt'), 'eula=true');
   console.log('Server DIR Not Found Creating')
 };
-if (!fs.existsSync(path.join(__dirname, '../../server_files'))) {
-  fs.mkdirSync(path.join(__dirname, '../../server_files'))
+if (!fs.existsSync(path.join(homedir,'Documents','MC_Server_Files','server_files'))) {
+  fs.mkdirSync(path.join(homedir,'Documents','MC_Server_Files','server_files'))
   console.log('Server Files DIR Not Found Creating')
 };
+if (!fs.existsSync(path.join(homedir,'Documents','MC_Server_Files','configs','server.json'))){
+  fs.writeFileSync(path.join(homedir,'Documents','MC_Server_Files','configs','server.json'), '[]');
+}
 console.log('DIR Checks Complete');
-
+const savedServers = require(path.join(homedir,'Documents','MC_Server_Files','configs','server.json'));
 //Global Variables
 var versions = {};
 //Functions
@@ -65,7 +75,7 @@ function getVerions() {
 };
 function updateServers() {
   var temp = JSON.stringify(savedServers)
-  fs.writeFile(path.resolve(__dirname, '../servers.json'), temp, function (err) {
+  fs.writeFile(path.resolve(homedir,'Documents','MC_Server_Files','configs','server.json'), temp, function (err) {
     // If an error occurred, show it and return
     if (err) return console.error(err);
     // Successfully wrote to the file!
@@ -73,7 +83,7 @@ function updateServers() {
 }
 async function downloadServer(file, name) {
   const url = file
-  const filePath = path.resolve(__dirname, '../../server_files', name + '.jar')
+  const filePath = path.resolve(homedir,'Documents','MC_Server_Files','server_files', name + '.jar')
   const writer = fs.createWriteStream(filePath)
 
   const response = await axios({
@@ -106,11 +116,11 @@ router.get("/trigger/:name", (req, res, next) => {
       var data = serverProperties;
       data +=
         `level-name=` + selectedServer.name + `\nmotd=`+ selectedServer.name + `\nwhite-list=`+ selectedServer.whitelist + `\nmax-players=`+ selectedServer.max + `\ngamemode=`+ selectedServer.gamemode + `\ndifficulty=`+ selectedServer.difficulty
-      fs.writeFileSync(path.join(__dirname, '../../server/server.properties'), data);
-      fs.copyFile(path.join(__dirname, '../../server_files', selectedServer.version + '.jar'), path.join(__dirname, '../../server/server.jar'), (err) => {
+      fs.writeFileSync(path.join((homedir,'Documents','MC_Server_Files','server','server.properties')), data);
+      fs.copyFile(path.join(__dirname, '../../server_files', selectedServer.version + '.jar'), path.join(homedir,'Documents','MC_Server_Files','server','server.jar'), (err) => {
         if (err) throw err;
         if (req.query.window == "true"){
-          exec(`start cmd.exe /k "cd `+path.join(__dirname, '../../server')+` && java -Xmx1024M -Xms1024M -jar server.jar nogui && exit"`, (error, stdout, stderr) => {
+          exec(`start cmd.exe /k "cd `+path.join(homedir,'Documents','MC_Server_Files','server')+` && java -Xmx1024M -Xms1024M -jar server.jar nogui && exit"`, (error, stdout, stderr) => {
             if (error) {
                 console.log(`error: ${error.message}`);
                 return;
@@ -122,7 +132,7 @@ router.get("/trigger/:name", (req, res, next) => {
             console.log(`stdout: ${stdout}`);
         });
         } else {
-          exec("cd "+path.join(__dirname, '../../server')+" && java -Xmx1024M -Xms1024M -jar server.jar nogui", (error, stdout, stderr) => {
+          exec("cd "+path.join(homedir,'Documents','MC_Server_Files','server')+" && java -Xmx1024M -Xms1024M -jar server.jar nogui", (error, stdout, stderr) => {
             if (error) {
                 console.log(`error: ${error.message}`);
                 return;
@@ -149,7 +159,7 @@ router.get("/source/:version", (req, res, next) => {
   } else if (selectedVersion == "latest_snapshot") {
     selectedVersion = versions.latest.snapshot;
   };
-  fs.readdir(path.resolve(__dirname, '../../server_files'), (err, files) => {
+  fs.readdir(path.resolve(homedir,'Documents','MC_Server_Files','server_files'), (err, files) => {
     if (files.includes(selectedVersion + '.jar')) {
       res.json({ message: 'OK', download: false });
     } else {
