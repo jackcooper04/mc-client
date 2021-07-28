@@ -29,7 +29,7 @@ function createWindow () {
 fs.readdir(path.resolve(__dirname,'../../../'), (err, files) => {
   for (filesIdx in files){
     if (files[filesIdx].includes('app')){
-      if (file[filesIdx] != 'app-'+app.getVersion()){
+      if (files[filesIdx] != 'app-'+app.getVersion()){
         rimraf.sync(path.resolve(__dirname,'../../../',files[filesIdx]))
       }
     }
