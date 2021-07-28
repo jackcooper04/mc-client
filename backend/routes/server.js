@@ -117,7 +117,7 @@ router.get("/trigger/:name", (req, res, next) => {
       data +=
         `level-name=` + selectedServer.name + `\nmotd=`+ selectedServer.name + `\nwhite-list=`+ selectedServer.whitelist + `\nmax-players=`+ selectedServer.max + `\ngamemode=`+ selectedServer.gamemode + `\ndifficulty=`+ selectedServer.difficulty
       fs.writeFileSync(path.join((homedir,'Documents','MC_Server_Files','server','server.properties')), data);
-      fs.copyFile(path.join(__dirname, '../../server_files', selectedServer.version + '.jar'), path.join(homedir,'Documents','MC_Server_Files','server','server.jar'), (err) => {
+      fs.copyFile(path.join(homedir,'Documents','MC_Server_Files','server_files', selectedServer.version + '.jar'), path.join(homedir,'Documents','MC_Server_Files','server','server.jar'), (err) => {
         if (err) throw err;
         if (req.query.window == "true"){
           exec(`start cmd.exe /k "cd `+path.join(homedir,'Documents','MC_Server_Files','server')+` && java -Xmx1024M -Xms1024M -jar server.jar nogui && exit"`, (error, stdout, stderr) => {

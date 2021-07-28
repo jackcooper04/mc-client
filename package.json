@@ -37,6 +37,7 @@
     "express": "^4.17.1",
     "modern-rcon": "^1.0.3",
     "morgan": "^1.10.0",
+    "rimraf": "^3.0.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
     "update-electron-app": "^2.0.1",

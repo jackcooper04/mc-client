@@ -2,7 +2,7 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
 const path = require('path');
-
+var rimraf = require("rimraf");
 const webServer = require('./web_server');
 require('update-electron-app')();
 console.log()
@@ -23,7 +23,18 @@ function createWindow () {
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 }
+//../../../
+fs.readdir(path.resolve(__dirname,'../../../'), (err, files) => {
+  for (filesIdx in files){
+    if (files[filesIdx].includes('app')){
+      if (file[filesIdx] != 'app-'+app.getVersion()){
+        rimraf.sync(path.resolve(__dirname,'../../../',files[filesIdx]))
+      }
+    }
+  }
 
+  //console.log(files)
+});
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
