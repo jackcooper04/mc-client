@@ -24,13 +24,17 @@
   <mat-form-field appearance="fill">
     <mat-label>Select</mat-label>
     <mat-select formControlName="version" required (valueChange)="onValueChange($event)">
+      <mat-option>--</mat-option>
       <mat-option value="latest_release">latest</mat-option>
       <mat-option value="latest_snapshot">snapshot</mat-option>
-      <mat-option value="1.7.10">1.17.10</mat-option>
-      <mat-option value="1.16">1.16</mat-option>
-    </mat-select>
-  </mat-form-field>
+      <mat-option *ngFor="let version of versionStore" [value]="version">{{version}}</mat-option>
 
+      <!-- <mat-option value="1.7.10">1.17.10</mat-option>
+      <mat-option value="1.16">1.16</mat-option> -->
+    </mat-select>
+
+  </mat-form-field>
+  <mat-checkbox class="example-margin" [checked]="snapshot" (change)="changeValue($event)">Snapshot</mat-checkbox>
 </div>
 <button mat-button color="primary" (click)="submit()">Submit</button>
 <p >Click Me</p>

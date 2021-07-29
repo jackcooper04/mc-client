@@ -10,6 +10,8 @@ import { ServerService } from '../server.service';
 export class ServerListComponent implements OnInit {
   servers:any;
   serverSub:Subscription;
+  downloadSub:Subscription;
+  isDownloading = false;
   window = true;
   constructor(public serverService:ServerService) { }
 
@@ -19,6 +21,10 @@ export class ServerListComponent implements OnInit {
       this.servers = data.servers;
       console.log(this.servers)
     });
+    this.downloadSub = this.serverService.getDownloadStatListener().subscribe(data => {
+      this.isDownloading = data.isDownloading;
+    });
+    this.serverService.getDownloadStatus();
     this.serverService.getServers();
   }
   triggerServer(name:any){

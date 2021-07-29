@@ -26,7 +26,9 @@ function createWindow () {
   // mainWindow.webContents.openDevTools()
 }
 //../../../
+
 fs.readdir(path.resolve(__dirname,'../../../'), (err, files) => {
+  console.log(files)
   for (filesIdx in files){
     if (files[filesIdx].includes('app')){
       if (files[filesIdx] != 'app-'+app.getVersion()){

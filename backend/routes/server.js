@@ -20,6 +20,7 @@ fs.readFile(path.join(__dirname, '../templates/server.properties'), 'utf8', (err
 });
 //Initalise Packages
 const router = express.Router();
+var isDownloading = false;
 const rcon = new Rcon('localhost','**58powerTHINKheight42**');
 console.log(path.join(homedir,'Documents','MC_Server_Files','server'))
 //Directory Checks
@@ -68,6 +69,7 @@ function getVerions() {
   axios(config)
     .then(function (response) {
       versions = response.data;
+      updateServerFiles();
     })
     .catch(function (error) {
       console.log(error);
@@ -80,8 +82,70 @@ function updateServers() {
     if (err) return console.error(err);
     // Successfully wrote to the file!
   });
-}
-async function downloadServer(file, name) {
+};
+/* fs.readdir(path.resolve(homedir,'Documents','MC_Server_Files','server_files'), (err, files) => {
+  if (files.includes(selectedVersion + '.jar')) {
+    res.json({ message: 'OK', download: false });
+  } else {
+    var storedVersions = versions.versions;
+    for (versionIdx in storedVersions) {
+      if (storedVersions[versionIdx].id == selectedVersion) {
+        var serverUrl = storedVersions[versionIdx].url;
+        var config = {
+          method: 'get',
+          url: serverUrl,
+          headers: {}
+        };
+        axios(config)
+          .then(function (response) {
+            downloadServer(response.data.downloads.server.url, selectedVersion, response.data.downloads.server.size)
+            res.json({ message: 'OK', download: true })
+          });
+      };
+    };
+  };
+
+  //console.log(files)
+}); */
+function updateServerFiles(){
+  var checkArray = new Array();
+  for (serverIdx in savedServers){
+    var selectedVersion = savedServers[serverIdx].version
+    if (savedServers[serverIdx].version == "latest_release") {
+      selectedVersion = versions.latest.release;
+    } else if (savedServers[serverIdx].version == "latest_snapshot") {
+      selectedVersion = versions.latest.snapshot;
+    };
+    fs.readdir(path.resolve(homedir,'Documents','MC_Server_Files','server_files'), (err, files) => {
+      if (files.includes(selectedVersion + '.jar')) {
+        console.log('Confirm' + selectedVersion)
+      } else {
+        var storedVersions = versions.versions;
+        for (versionIdx in storedVersions) {
+          if (storedVersions[versionIdx].id == selectedVersion) {
+            var serverUrl = storedVersions[versionIdx].url;
+            var config = {
+              method: 'get',
+              url: serverUrl,
+              headers: {}
+            };
+            axios(config)
+              .then(function (response) {
+                downloadServer(response.data.downloads.server.url, selectedVersion, response.data.downloads.server.size)
+                console.log('Missing Downloading')
+              });
+          };
+        };
+      };
+
+      //console.log(files)
+    });
+  };
+
+
+};
+
+async function downloadServer(file, name, size) {
   const url = file
   const filePath = path.resolve(homedir,'Documents','MC_Server_Files','server_files', name + '.jar')
   const writer = fs.createWriteStream(filePath)
@@ -93,8 +157,23 @@ async function downloadServer(file, name) {
   })
 
   response.data.pipe(writer)
+  console.log(size)
+  var checkForProgress = setInterval(function(){
+   var file = fs.statSync(filePath);
+   if (file.size == size){
+     clearInterval(checkForProgress);
+     //console.log('done')
+     isDownloading = false;
+     return;
+   };
+   isDownloading = true;
+    //console.log(Math.round((file.size / size) * 100))
+ }, 10);
+
+
 
   return new Promise((resolve, reject) => {
+    //writer.on('finish',clearTimeout(checkForProgress))
     writer.on('finish', resolve)
     writer.on('error', reject)
   })
@@ -105,6 +184,30 @@ async function downloadServer(file, name) {
 router.get("", (req, res, next) => {
   res.json({ servers: savedServers });
 });
+router.get("/versionList",(req,res,next) => {
+  serverList = new Array();
+  for (serverIdx in versions.versions){
+    if (req.query.snapshot == "false"){
+      if (!versions.versions[serverIdx].id.includes('w') && !versions.versions[serverIdx].id.includes('-') && !versions.versions[serverIdx].id.includes('pre') && !versions.versions[serverIdx].id.includes('Pre') && !versions.versions[serverIdx].id.includes('a') && !versions.versions[serverIdx].id.includes('b') && !versions.versions[serverIdx].id.includes('c')){
+
+        serverList.push(versions.versions[serverIdx].id);
+      } else {
+       // serverList.push(versions.versions[serverIdx].id);
+      }
+    }
+
+    if (req.query.snapshot == undefined || req.query.snapshot == "true") {
+      serverList.push(versions.versions[serverIdx].id);
+    }
+
+
+
+  }
+  res.json({versions:serverList})
+})
+router.get("/isDownload", (req,res,next) => {
+  res.json({isDownloading:isDownloading});
+})
 router.get("/rcon/:command", (req,res,next) => {
   sendCommand(req.params['command']);
   res.json({message:'OK'});
@@ -112,11 +215,17 @@ router.get("/rcon/:command", (req,res,next) => {
 router.get("/trigger/:name", (req, res, next) => {
   for (serverIdx in savedServers) {
     if (savedServers[serverIdx].name == req.params['name']) {
+
       var selectedServer = savedServers[serverIdx];
+      if (selectedServer.version == "latest_release") {
+        selectedServer.version = versions.latest.release;
+      } else if (selectedServer.version == "latest_snapshot") {
+        selectedServer.version = versions.latest.snapshot;
+      };
       var data = serverProperties;
       data +=
         `level-name=` + selectedServer.name + `\nmotd=`+ selectedServer.name + `\nwhite-list=`+ selectedServer.whitelist + `\nmax-players=`+ selectedServer.max + `\ngamemode=`+ selectedServer.gamemode + `\ndifficulty=`+ selectedServer.difficulty
-      fs.writeFileSync(path.join((homedir,'Documents','MC_Server_Files','server','server.properties')), data);
+      fs.writeFileSync(path.join(homedir,'Documents','MC_Server_Files','server','server.properties'), data);
       fs.copyFile(path.join(homedir,'Documents','MC_Server_Files','server_files', selectedServer.version + '.jar'), path.join(homedir,'Documents','MC_Server_Files','server','server.jar'), (err) => {
         if (err) throw err;
         if (req.query.window == "true"){
@@ -174,7 +283,7 @@ router.get("/source/:version", (req, res, next) => {
           };
           axios(config)
             .then(function (response) {
-              downloadServer(response.data.downloads.server.url, selectedVersion)
+              downloadServer(response.data.downloads.server.url, selectedVersion, response.data.downloads.server.size)
               res.json({ message: 'OK', download: true })
             });
         };
@@ -188,11 +297,11 @@ router.get("/source/:version", (req, res, next) => {
 //version
 router.post("/", (req, res, next) => {
   var selectedVersion = req.body.version;
-  if (selectedVersion == "latest_release") {
+ /*  if (selectedVersion == "latest_release") {
     selectedVersion = versions.latest.release;
   } else if (selectedVersion == "latest_snapshot") {
     selectedVersion = versions.latest.snapshot;
-  };
+  }; */
   var newServer = {
     name: req.body.name,
     version: selectedVersion,

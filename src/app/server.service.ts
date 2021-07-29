@@ -7,7 +7,11 @@ import { Subject } from 'rxjs';
 })
 export class ServerService {
   private servers = [];
+  private isDownloading = false;
+  private versions = [];
   private serversUpdated = new Subject<{servers:any[]}>();
+  private versionsUpdated = new Subject<{versions:any[]}>();
+  private downloadStatUpdated = new Subject<{isDownloading:boolean}>();
 
   constructor(private http:HttpClient) { }
 
@@ -20,8 +24,31 @@ export class ServerService {
       this.serversUpdated.next({servers:[...this.servers]});
     });
   };
+  getDownloadStatus(){
+    this.http.get<{isDownloading:boolean}>('http://localhost:8081/api/server/isDownload')
+    .subscribe(responseData => {
+      this.isDownloading = responseData.isDownloading;
+
+      this.downloadStatUpdated.next({isDownloading:this.isDownloading});
+    });
+  };
+  getVersions(snapshot:boolean){
+    this.http.get<{versions:any}>('http://localhost:8081/api/server/versionList?snapshot='+snapshot)
+    .subscribe(responseData => {
+      this.versions = responseData.versions;
+
+      this.versionsUpdated.next({versions:this.versions});
+    });
+  };
+
   getServerListener(){
     return this.serversUpdated.asObservable();
+  };
+  getVersionListener(){
+   return this.versionsUpdated.asObservable();
+  }
+  getDownloadStatListener(){
+    return this.downloadStatUpdated.asObservable();
   };
   addServer(data:any){
     this.http.post("http://localhost:8081/api/server",data)
