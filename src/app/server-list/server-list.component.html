@@ -1,5 +1,5 @@
 
-<button mat-button color="primary" *ngFor="let serverIdx of servers"   [disabled]="isDownloading"(click)="triggerServer(serverIdx.name)">{{serverIdx.name}}</button>
-<mat-checkbox class="example-margin" [checked]="window" (change)="changeValue($event)">Window</mat-checkbox>
+<!-- <button mat-button color="primary" *ngFor="let serverIdx of servers"   [disabled]="isDownloading"(click)="triggerServer(serverIdx.name)">{{serverIdx.name}}</button>
+<mat-checkbox class="example-margin" [checked]="window" (change)="changeValue($event)">Window</mat-checkbox> -->
 
-<button mat-button color="primary" (click)="serverService.sendRcon('stop')" >Stop Server</button>
+<a mat-list-item *ngFor="let serverIdx of servers" (click)="triggerServer(serverIdx.name)" > {{serverIdx.name}} </a>
