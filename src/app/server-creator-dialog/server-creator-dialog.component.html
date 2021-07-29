@@ -1,3 +1,4 @@
+<h2>Create a Server</h2>
 <div [formGroup]="form">
   <mat-form-field appearance="fill">
     <mat-label>Input</mat-label>
@@ -34,9 +35,7 @@
     </mat-select>
 
   </mat-form-field>
-  <mat-checkbox class="example-margin" [checked]="snapshot" (change)="changeValue($event)">Snapshot</mat-checkbox>
+  <mat-checkbox class="example-margin" [checked]="snapshot" (change)="changeValue($event)">Include Snapshot Versions?</mat-checkbox>
 </div>
-<button mat-button color="primary" (click)="submit()">Submit</button>
-<p >Click Me</p>
-<p>Status: {{form.status}}</p>
-
+<br>
+<button mat-raised-button color="primary" (click)="submit()">Submit</button>

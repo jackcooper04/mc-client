@@ -1,16 +1,17 @@
-import { HttpClient } from '@angular/common/http';
+import { Inject } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { HttpClient } from '@angular/common/http';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'mc-client/resources/app/node_modules/rxjs';
-
 import { ServerService } from '../server.service';
 
 @Component({
-  selector: 'app-server-creater',
-  templateUrl: './server-creater.component.html',
-  styleUrls: ['./server-creater.component.css']
+  selector: 'app-server-creator-dialog',
+  templateUrl: './server-creator-dialog.component.html',
+  styleUrls: ['./server-creator-dialog.component.css']
 })
-export class ServerCreaterComponent implements OnInit {
+export class ServerCreatorDialogComponent implements OnInit {
   showError = false;
   versionSub:Subscription;
   downloadSub:Subscription;
@@ -23,8 +24,20 @@ export class ServerCreaterComponent implements OnInit {
     difficulty:new FormControl('peaceful'),
     version:new FormControl('')
   });
-  constructor(private http:HttpClient, public serverService:ServerService) { }
+  message:string
+  cancelButtonText = " Cancel";
+  constructor(@Inject (MAT_DIALOG_DATA) public data:any, public dialogRef:MatDialogRef<ServerCreatorDialogComponent>,private http:HttpClient, public serverService:ServerService ) {
+    if (data){
+      this.message = data.message || this.message;
 
+      if(data.buttonText){
+        this.cancelButtonText = data.buttonText.cancel || this.cancelButtonText;
+      }
+    }
+  }
+  onConfirmClick(): void {
+    this.dialogRef.close(true);
+  }
   ngOnInit(): void {
     this.versionSub = this.serverService.getVersionListener().subscribe(data => {
       this.versionStore = data.versions;
@@ -81,10 +94,12 @@ export class ServerCreaterComponent implements OnInit {
         "whitelist":false
       }
       this.serverService.addServer(obj);
+      this.dialogRef.close(true)
 
     } else {
       this.showError = true;
     }
 
   }
+
 }
