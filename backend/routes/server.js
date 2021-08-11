@@ -3,6 +3,7 @@ const express = require('express');
 const axios = require('axios');
 const path = require('path');
 const fs = require('fs');
+const Gamedig = require('gamedig');
 const Rcon = require('modern-rcon');
 const homedir = require('os').homedir();
 const { exec } = require("child_process");
@@ -21,6 +22,12 @@ fs.readFile(path.join(__dirname, '../templates/server.properties'), 'utf8', (err
 //Initalise Packages
 const router = express.Router();
 var isDownloading = false;
+var status =  {
+  "online":false,
+  "motd":'',
+  "players":[]
+
+}
 const rcon = new Rcon('localhost','**58powerTHINKheight42**');
 console.log(path.join(homedir,'Documents','MC_Server_Files','server'))
 //Directory Checks
@@ -75,6 +82,27 @@ function getVerions() {
       console.log(error);
     });
 };
+function getStatus(){
+  Gamedig.query({
+    type: 'minecraft',
+    host: 'localhost'
+}).then((state) => {
+  status.online = true;
+  status.motd = state.name;
+  status.players = state.raw.vanilla.raw.players.sample;
+
+
+
+}).catch((error) => {
+  status.online = false;
+  status.motd = '',
+  status.players = []
+
+
+});
+};
+getStatus();
+setInterval(function(){ getStatus(); }, 2000);
 function updateServers() {
   var temp = JSON.stringify(savedServers)
   fs.writeFile(path.resolve(homedir,'Documents','MC_Server_Files','configs','server.json'), temp, function (err) {
@@ -83,30 +111,7 @@ function updateServers() {
     // Successfully wrote to the file!
   });
 };
-/* fs.readdir(path.resolve(homedir,'Documents','MC_Server_Files','server_files'), (err, files) => {
-  if (files.includes(selectedVersion + '.jar')) {
-    res.json({ message: 'OK', download: false });
-  } else {
-    var storedVersions = versions.versions;
-    for (versionIdx in storedVersions) {
-      if (storedVersions[versionIdx].id == selectedVersion) {
-        var serverUrl = storedVersions[versionIdx].url;
-        var config = {
-          method: 'get',
-          url: serverUrl,
-          headers: {}
-        };
-        axios(config)
-          .then(function (response) {
-            downloadServer(response.data.downloads.server.url, selectedVersion, response.data.downloads.server.size)
-            res.json({ message: 'OK', download: true })
-          });
-      };
-    };
-  };
 
-  //console.log(files)
-}); */
 function updateServerFiles(){
   var checkArray = new Array();
   for (serverIdx in savedServers){
@@ -118,7 +123,7 @@ function updateServerFiles(){
     };
     fs.readdir(path.resolve(homedir,'Documents','MC_Server_Files','server_files'), (err, files) => {
       if (files.includes(selectedVersion + '.jar')) {
-        console.log('Confirm' + selectedVersion)
+        //console.log('Confirm' + selectedVersion)
       } else {
         var storedVersions = versions.versions;
         for (versionIdx in storedVersions) {
@@ -179,10 +184,14 @@ async function downloadServer(file, name, size) {
   })
 }
 
-
+//
+//
 //Routes
 router.get("", (req, res, next) => {
   res.json({ servers: savedServers });
+});
+router.get("/status", (req,res,next) => {
+  res.json({status:status})
 });
 router.get("/versionList",(req,res,next) => {
   serverList = new Array();

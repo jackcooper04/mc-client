@@ -11,7 +11,10 @@ import { ServerService } from '../server.service';
 })
 export class HeaderComponent implements OnInit {
   servers:any;
+  status:any;
   serverSub:Subscription;
+  button_icon = "play_arrow";
+  statusSub:Subscription;
   downloadSub:Subscription;
   isDownloading = false;
   window = true;
@@ -33,10 +36,20 @@ export class HeaderComponent implements OnInit {
       this.servers = data.servers;
       console.log(this.servers)
     });
+    this.statusSub = this.serverService.getServerStatusListener().subscribe(data => {
+      this.status = data.status;
+      if (this.status.online == true){
+        this.button_icon = "stop";
+      } else {
+        this.button_icon = "play_arrow"
+      };
+      console.log(this.status);
+    });
     this.downloadSub = this.serverService.getDownloadStatListener().subscribe(data => {
       this.isDownloading = data.isDownloading;
     });
     this.serverService.getDownloadStatus();
+    this.serverService.getStatus();
     this.serverService.getServers();
   }
   triggerServer(name:any){

@@ -8,8 +8,10 @@ import { Subject } from 'rxjs';
 export class ServerService {
   private servers = [];
   private isDownloading = false;
+  private status = {};
   private versions = [];
   private serversUpdated = new Subject<{servers:any[]}>();
+  private statusUpdated =  new Subject<{status:any}>();
   private versionsUpdated = new Subject<{versions:any[]}>();
   private downloadStatUpdated = new Subject<{isDownloading:boolean}>();
 
@@ -22,6 +24,15 @@ export class ServerService {
       this.servers = responseData.servers;
       console.log(this.servers)
       this.serversUpdated.next({servers:[...this.servers]});
+    });
+  };
+  getStatus(){
+
+    this.http.get<{status:any}>('http://localhost:8081/api/server/status')
+    .subscribe(responseData => {
+      this.status = responseData.status;
+
+      this.statusUpdated.next({status:this.status});
     });
   };
   getDownloadStatus(){
@@ -49,6 +60,9 @@ export class ServerService {
   }
   getDownloadStatListener(){
     return this.downloadStatUpdated.asObservable();
+  };
+  getServerStatusListener(){
+    return this.statusUpdated.asObservable();
   };
   addServer(data:any){
     this.http.post("http://localhost:8081/api/server",data)
