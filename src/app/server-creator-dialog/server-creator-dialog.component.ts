@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Subscription } from 'mc-client/resources/app/node_modules/rxjs';
+import { Subscription } from 'rxjs';
 import { ServerService } from '../server.service';
 
 @Component({

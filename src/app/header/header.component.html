@@ -15,7 +15,7 @@
     <mat-sidenav #sidenav>
       <mat-nav-list>
 
-        <a mat-list-item *ngFor="let serverIdx of servers" (click)="triggerServer(serverIdx.name)" > {{serverIdx.name}} </a>
+        <a mat-list-item *ngFor="let serverIdx of servers" (click)="triggerServer(serverIdx.name)" [disabled]="isDownloading"> {{serverIdx.name}} </a>
         <a mat-list-item   mat-list-item><mat-checkbox class="example-margin" [checked]="window" (change)="changeValue($event)">Show Window</mat-checkbox></a>
         <a mat-list-item (click)="sidenav.toggle()"  mat-list-item>Close</a>
 
