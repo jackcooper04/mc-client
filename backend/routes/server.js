@@ -115,42 +115,58 @@ function updateServers() {
 function updateServerFiles(){
   var checkArray = new Array();
   for (serverIdx in savedServers){
-    var selectedVersion = savedServers[serverIdx].version
-    if (savedServers[serverIdx].version == "latest_release") {
-      selectedVersion = versions.latest.release;
-    } else if (savedServers[serverIdx].version == "latest_snapshot") {
-      selectedVersion = versions.latest.snapshot;
-    };
-    fs.readdir(path.resolve(homedir,'Documents','MC_Server_Files','server_files'), (err, files) => {
-      if (files.includes(selectedVersion + '.jar')) {
-        //console.log('Confirm' + selectedVersion)
-      } else {
-        var storedVersions = versions.versions;
-        for (versionIdx in storedVersions) {
-          if (storedVersions[versionIdx].id == selectedVersion) {
-            var serverUrl = storedVersions[versionIdx].url;
-            var config = {
-              method: 'get',
-              url: serverUrl,
-              headers: {}
-            };
-            axios(config)
-              .then(function (response) {
-                downloadServer(response.data.downloads.server.url, selectedVersion, response.data.downloads.server.size)
-                console.log('Missing Downloading')
-              });
-          };
-        };
-      };
+   var selectedVersion = savedServers[serverIdx].version;
 
-      //console.log(files)
-    });
+    if (savedServers[serverIdx].version == "latest_release") {
+     var selectedVersion = versions.latest.release;
+    } else if (savedServers[serverIdx].version == "latest_snapshot") {
+     var selectedVersion = versions.latest.snapshot;
+    };
+
+    checkVersions(selectedVersion);
+
   };
 
 
 };
+var queue = new Array();
+
+async function checkVersions(selected_version){
+  fs.readdir(path.resolve(homedir,'Documents','MC_Server_Files','server_files'), (err, files) => {
+    if (files.includes(selected_version + '.jar')) {
+      //console.log('Confirm' + selectedVersion)
+    } else {
+      var storedVersions = versions.versions;
+
+      for (versionIdx in storedVersions) {
+
+        if (storedVersions[versionIdx].id == selected_version) {
+
+          var serverUrl = storedVersions[versionIdx].url;
+
+
+          var config = {
+            method: 'get',
+            url: serverUrl,
+            headers: {}
+          };
+          axios(config)
+            .then(function (response) {
+              console.log(response.data.downloads.server.url);
+              console.log(selected_version)
+              downloadServer(response.data.downloads.server.url, selected_version, response.data.downloads.server.size)
+              console.log('Missing Downloading')
+            });
+        };
+      };
+    };
+
+    //console.log(files)
+  });
+}
 
 async function downloadServer(file, name, size) {
+
   const url = file
   const filePath = path.resolve(homedir,'Documents','MC_Server_Files','server_files', name + '.jar')
   const writer = fs.createWriteStream(filePath)
