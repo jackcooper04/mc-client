@@ -25,7 +25,9 @@ var isDownloading = false;
 var status =  {
   "online":false,
   "motd":'',
-  "players":[]
+  "players":[],
+  "version":"",
+  "max":""
 
 }
 const rcon = new Rcon('localhost','**58powerTHINKheight42**');
@@ -87,16 +89,22 @@ function getStatus(){
     type: 'minecraft',
     host: 'localhost'
 }).then((state) => {
-  status.online = true;
-  status.motd = state.name;
-  status.players = state.raw.vanilla.raw.players.sample;
 
+  status.online = true;
+  status.max  = state.raw.vanilla.maxplayers
+  status.motd = state.name;
+  status.version = state.raw.vanilla.raw.version.name;
+  status.players = state.raw.vanilla.raw.players.sample;
+  if (status.players == undefined){
+    status.players = [];
+  }
 
 
 }).catch((error) => {
   status.online = false;
-  status.motd = '',
-  status.players = []
+  status.motd = '';
+  status.players = [];
+  status.max = "";
 
 
 });
@@ -209,6 +217,20 @@ router.get("", (req, res, next) => {
 router.get("/status", (req,res,next) => {
   res.json({status:status})
 });
+router.get("/banned",(req,res,next) => {
+  fs.readFile(path.join(homedir,'Documents','MC_Server_Files','server','banned-players.json'), 'utf8' , (err, data) => {
+    if (err) {
+      console.error(err)
+      return
+    }
+    data = JSON.parse(data)
+    res.json({banned:data})
+  })
+
+
+
+
+})
 router.get("/versionList",(req,res,next) => {
   serverList = new Array();
   for (serverIdx in versions.versions){

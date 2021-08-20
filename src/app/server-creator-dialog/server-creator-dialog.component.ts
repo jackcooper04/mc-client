@@ -49,7 +49,7 @@ export class ServerCreatorDialogComponent implements OnInit {
     let checkForComplete = setInterval(function(){
       root.serverService.getDownloadStatus();
       if (!root.isDownloading){
-        console.log('clear')
+        //console.log('clear')
         clearInterval(checkForComplete)
 
 
@@ -67,7 +67,7 @@ export class ServerCreatorDialogComponent implements OnInit {
         setTimeout(function(){
           root.serverService.getDownloadStatus();
         if (!root.isDownloading){
-          console.log('clear')
+          //console.log('clear')
         clearInterval(checkForComplete)
         }
         }, 2000);
@@ -75,12 +75,12 @@ export class ServerCreatorDialogComponent implements OnInit {
 
       };
    }, 1000);
-    console.log(event)
+   // console.log(event)
   }
   changeValue(event:any){
     this.snapshot = event.checked;
     this.serverService.getVersions(this.snapshot);
-    console.log(event.checked)
+  //  console.log(event.checked)
   }
   submit(){
     if (this.form.valid){

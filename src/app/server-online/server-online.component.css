@@ -1,0 +1,13 @@
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 50%;
+  border-right: 0.5px solid black;
+  min-height: 390px;
+}
+mat-expansion-panel {
+  margin-right: 20px;
+  margin-left: 20px;
+}

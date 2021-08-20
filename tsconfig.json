@@ -1,6 +1,8 @@
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
+  "types": [ "node" ],
+"typeRoots": [ "../node_modules/@types" ],
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
@@ -10,6 +12,9 @@
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
+    "types": [ "node" ],
+"typeRoots": [ "../node_modules/@types" ],
+    "resolveJsonModule": true,
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",

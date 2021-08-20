@@ -19,7 +19,7 @@ export class ServerListComponent implements OnInit {
     this.serverSub = this.serverService.getServerListener().subscribe(data => {
 
       this.servers = data.servers;
-      console.log(this.servers)
+     // console.log(this.servers)
     });
     this.downloadSub = this.serverService.getDownloadStatListener().subscribe(data => {
       this.isDownloading = data.isDownloading;
@@ -32,7 +32,7 @@ export class ServerListComponent implements OnInit {
   };
   changeValue(event:any){
     this.window = event.checked;
-    console.log(event.checked)
+  //  console.log(event.checked)
   }
 
 }

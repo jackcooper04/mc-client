@@ -12,6 +12,7 @@ import { ServerService } from '../server.service';
 export class HeaderComponent implements OnInit {
   servers:any;
   status:any;
+
   serverSub:Subscription;
   button_icon = "play_arrow";
   statusSub:Subscription;
@@ -26,7 +27,7 @@ export class HeaderComponent implements OnInit {
       width:"300px"
     });
     dialogRef.afterClosed().subscribe(result=>{
-      console.log(result)
+     // console.log(result)
     })
   }
 
@@ -34,22 +35,23 @@ export class HeaderComponent implements OnInit {
     this.serverSub = this.serverService.getServerListener().subscribe(data => {
 
       this.servers = data.servers;
-      console.log(this.servers)
+     // console.log(this.servers)
     });
     this.statusSub = this.serverService.getServerStatusListener().subscribe(data => {
       this.status = data.status;
       if (this.status.online == true){
         let root = this;
         setTimeout(function(){
-          console.log('hi')
+        //  console.log('hi')
           root.serverService.getStatus();
 
         }, 2000);
+        this.isDownloading = false;
         this.button_icon = "stop";
       } else {
         this.button_icon = "play_arrow"
       };
-      console.log(this.status);
+    //  console.log(this.status);
     });
     this.downloadSub = this.serverService.getDownloadStatListener().subscribe(data => {
       this.isDownloading = data.isDownloading;
@@ -72,7 +74,7 @@ export class HeaderComponent implements OnInit {
             setTimeout(function(){
               root.serverService.getDownloadStatus();
             if (!root.isDownloading){
-              console.log('clear')
+           //   console.log('clear')
             clearInterval(checkForComplete)
             }
             }, 2000);
@@ -86,19 +88,20 @@ export class HeaderComponent implements OnInit {
   }
   triggerServer(name:any){
     this.serverService.activateServer(name,this.window);
+    this.isDownloading = true;
     let root = this;
    let checkTilBoot = setInterval(function(){
       root.serverService.getStatus();
-      console.log('checked')
+    //  console.log('checked')
       if (root.status.online){
-        console.log('Cleared')
+      //  console.log('Cleared')
         clearInterval(checkTilBoot);
       };
     }, 2000);
   };
   changeValue(event:any){
     this.window = event.checked;
-    console.log(event.checked)
+    //console.log(event.checked)
   }
 
 }

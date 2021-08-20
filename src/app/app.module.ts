@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ServerListComponent } from './server-list/server-list.component';
 import { ServerCreatorDialogComponent } from './server-creator-dialog/server-creator-dialog.component';
+import { ServerOnlineComponent } from './server-online/server-online.component';
+import { ServerOfflineComponent } from './server-offline/server-offline.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { ServerCreatorDialogComponent } from './server-creator-dialog/server-cre
     HeaderComponent,
 
     ServerListComponent,
-    ServerCreatorDialogComponent
+    ServerCreatorDialogComponent,
+    ServerOnlineComponent,
+    ServerOfflineComponent
   ],
   imports: [
     BrowserModule,

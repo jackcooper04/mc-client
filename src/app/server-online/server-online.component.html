@@ -1,0 +1,81 @@
+
+  <br>
+
+  <h1 style="text-align: center;"><b style="padding: 5px;">Server Is: <span style="color:green">Online</span></b><b style="padding: 5px;">Current World: <span >{{status.motd}}</span></b><b style="padding: 5px;">Version: <span >{{status.version}}</span></b></h1>
+
+<hr>
+<div class="row">
+  <div class="column">
+    <h2 style="text-align:center"> Players Online {{status.players.length}}/{{status.max}}</h2>
+    <mat-accordion >
+      <mat-expansion-panel hideToggle *ngFor="let playersIdx of playersOnline">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <img src="https://minotar.net/helm/{{playersIdx.id}}/40.png" alt="alternatetext">
+          </mat-panel-title>
+          <mat-panel-title style="margin-top: 7px;">
+            {{playersIdx.name}}
+          </mat-panel-title>
+
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <button mat-stroked-button color="primary" (click)="serverService.sendRcon('op ' + playersIdx.name)"><mat-icon>vpn_key</mat-icon>OP</button>
+          <button mat-stroked-button color="primary" (click)="serverService.sendRcon('deop ' + playersIdx.name)"><mat-icon>lock</mat-icon>De OP</button>
+          <button mat-stroked-button color="warn" (click)="serverService.sendRcon('kick ' + playersIdx.name + ' Kicked From Control Client')"><mat-icon>person_remove</mat-icon> Kick</button>
+          <button mat-stroked-button color="warn" (click)="serverService.sendRcon('ban ' + playersIdx.name + ' Banned From Control Client')"><mat-icon>block</mat-icon> Ban</button>
+
+        </mat-action-row>
+      </mat-expansion-panel>
+      <mat-expansion-panel
+                         >
+
+
+      </mat-expansion-panel>
+    </mat-accordion>
+    <h2 style="text-align:center" *ngIf="banned.length != 0"> Players Banned</h2>
+    <mat-accordion >
+      <mat-expansion-panel hideToggle *ngFor="let playersIdx of banned">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <img src="https://minotar.net/helm/{{playersIdx.uuid}}/40.png" alt="alternatetext">
+          </mat-panel-title>
+          <mat-panel-title style="margin-top: 7px;">
+            {{playersIdx.name}}
+          </mat-panel-title>
+
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <button mat-stroked-button color="primary" (click)="serverService.sendRcon('pardon ' + playersIdx.name)"><mat-icon>person_add</mat-icon>Pardon</button>
+
+
+        </mat-action-row>
+      </mat-expansion-panel>
+      <mat-expansion-panel
+                         >
+
+
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <div class="column">
+    <h2 style="text-align: center;">Quick Tools</h2>
+    <div style="justify-content:center; display: flex;">
+      <button mat-stroked-button color="primary" (click)="serverService.sendRcon('time set day')" ><mat-icon>light_mode</mat-icon>Set Day</button>
+      <button mat-stroked-button color="primary" (click)="serverService.sendRcon('time set night')" ><mat-icon>dark_mode</mat-icon>Set Night</button>
+    </div>
+    <br>
+    <div  style="justify-content:center; display: flex;">
+      <button mat-stroked-button color="primary"(click)="serverService.sendRcon('weather clear')" >Set Clear</button>
+      <button mat-stroked-button color="primary" (click)="serverService.sendRcon('weather rain')">Set Rain</button>
+      <button mat-stroked-button color="primary" (click)="serverService.sendRcon('weather thunder')">Set Thunder</button>
+    </div>
+    <br>
+    <div  style="justify-content:center; display: flex;">
+      <button mat-stroked-button color="primary"(click)="serverService.sendRcon('reload')" ><mat-icon>cached</mat-icon>Reload</button>
+      <button mat-stroked-button color="primary" (click)="serverService.sendRcon('stop')"><mat-icon>power_settings_new</mat-icon>Shutdown</button>
+
+    </div>
+    <br>
+
+  </div>
+</div>

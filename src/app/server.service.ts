@@ -9,9 +9,11 @@ export class ServerService {
   private servers = [];
   private isDownloading = false;
   private status = {};
+  private banned = [];
   private versions = [];
   private serversUpdated = new Subject<{servers:any[]}>();
   private statusUpdated =  new Subject<{status:any}>();
+  private bannedUpdated = new Subject<{banned:any}>();
   private versionsUpdated = new Subject<{versions:any[]}>();
   private downloadStatUpdated = new Subject<{isDownloading:boolean}>();
 
@@ -22,8 +24,17 @@ export class ServerService {
     this.http.get<{servers:any}>('http://localhost:8081/api/server')
     .subscribe(responseData => {
       this.servers = responseData.servers;
-      console.log(this.servers)
+   //   console.log(this.servers)
       this.serversUpdated.next({servers:[...this.servers]});
+    });
+  };
+  getBanned(){
+
+    this.http.get<{banned:any}>('http://localhost:8081/api/server/banned')
+    .subscribe(responseData => {
+      this.banned = responseData.banned;
+      //console.log(this.servers)
+      this.bannedUpdated.next({banned:[...this.banned]});
     });
   };
   getStatus(){
@@ -31,7 +42,7 @@ export class ServerService {
     this.http.get<{status:any}>('http://localhost:8081/api/server/status')
     .subscribe(responseData => {
       this.status = responseData.status;
-
+      this.getBanned();
       this.statusUpdated.next({status:this.status});
     });
   };
@@ -55,6 +66,10 @@ export class ServerService {
   getServerListener(){
     return this.serversUpdated.asObservable();
   };
+  getBannedListener(){
+
+    return this.bannedUpdated.asObservable();
+  };
   getVersionListener(){
    return this.versionsUpdated.asObservable();
   }
@@ -73,19 +88,19 @@ export class ServerService {
   sourceVersion(version:any){
     this.http.get<{message:string}>("http://localhost:8081/api/server/source/"+version)
     .subscribe(responseData => {
-      console.log(responseData)
+    //  console.log(responseData)
     })
   }
   sendRcon(command:any){
     this.http.get<{message:string}>("http://localhost:8081/api/server/rcon/"+command)
     .subscribe(responseData => {
-      console.log(responseData)
+  //    console.log(responseData)
     })
   }
   activateServer(name:string,window:boolean){
     this.http.get<{message:string}>("http://localhost:8081/api/server/trigger/"+name+"?window="+window)
     .subscribe(responseData => {
-      console.log(responseData)
+   //   console.log(responseData)
     })
   }
 }
