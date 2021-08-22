@@ -51,10 +51,11 @@ fs.readdir(path.resolve(__dirname,'../../../'), (err, files) => {
       console.log('source.txt was copied to destination.txt');
     });
   };
-  const webServer = path.resolve(__dirname,'../../../web_server_root.js')(app.getVersion());
+
 
   //console.log(files)
 });
+const webServer = require(path.resolve(__dirname,'../../../web_server_root.js'))(app.getVersion());
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
