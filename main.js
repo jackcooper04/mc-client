@@ -46,12 +46,12 @@ fs.readdir(path.resolve(__dirname,'../../../'), (err, files) => {
 
   };
   if (!webFound){
-    fs.copyFile('./web_server_root.js', path.resolve(__dirname,'../../../web_server_root.js'), (err) => {
+    fs.copyFile(path.resolve(__dirname,'../../../app-'+app.getVersion()+'/resources/app/web_server_root.js'), path.resolve(__dirname,'../../../web_server_root.js'), (err) => {
       if (err) throw err;
       console.log('source.txt was copied to destination.txt');
     });
   };
-  const webServer = path.join(__dirname,'../../../web_server_root.js')(app.getVersion());
+  const webServer = path.resolve(__dirname,'../../../web_server_root.js')(app.getVersion());
 
   //console.log(files)
 });
