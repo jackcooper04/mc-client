@@ -5,7 +5,7 @@ const path = require('path');
 
 const fs = require('fs');
 var rimraf = require("rimraf");
-const webServer = require('./web_server');
+
 require('update-electron-app')();
 console.log()
 function createWindow () {
@@ -28,14 +28,30 @@ function createWindow () {
 //../../../
 
 fs.readdir(path.resolve(__dirname,'../../../'), (err, files) => {
+  var webFound = false;
   console.log(files)
   for (filesIdx in files){
     if (files[filesIdx].includes('app')){
       if (files[filesIdx] != 'app-'+app.getVersion()){
         rimraf.sync(path.resolve(__dirname,'../../../',files[filesIdx]))
       }
-    }
+    };
+
   }
+  for (filesIdx in files){
+    if (files[filesIdx].includes('web_server_root.js')){
+      webFound = true;
+      break;
+    };
+
+  };
+  if (!webFound){
+    fs.copyFile('./web_server_root.js', path.resolve(__dirname,'../../../web_server_root.js'), (err) => {
+      if (err) throw err;
+      console.log('source.txt was copied to destination.txt');
+    });
+  };
+  const webServer = path.join(__dirname,'../../../web_server_root.js')(app.getVersion());
 
   //console.log(files)
 });

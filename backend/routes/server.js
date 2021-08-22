@@ -214,6 +214,9 @@ async function downloadServer(file, name, size) {
 router.get("", (req, res, next) => {
   res.json({ servers: savedServers });
 });
+function getServers() {
+  return {servers:savedServers};
+};
 router.get("/status", (req,res,next) => {
   res.json({status:status})
 });
@@ -363,4 +366,5 @@ router.post("/", (req, res, next) => {
 })
 getVerions();
 //Export Routes
+//module.exports = router;
 module.exports = router;
