@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 const project = require('../../../package.json')
+
+
+
 @Component({
   selector: 'app-server-offline',
   templateUrl: './server-offline.component.html',
@@ -7,9 +10,12 @@ const project = require('../../../package.json')
 })
 export class ServerOfflineComponent implements OnInit {
   public versionStore: string = project.version;
+
   constructor() { }
 
   ngOnInit(): void {
+
+
   }
   ngAfterViewInit(): void {
     (<any>window).twttr.widgets.load();
