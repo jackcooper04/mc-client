@@ -60,6 +60,11 @@ export class HeaderComponent implements OnInit {
     });
     this.serverService.getDownloadStatus();
     this.serverService.getStatus();
+    setTimeout(function(){
+      //  console.log('hi')
+        root.serverService.getStatus();
+
+      }, 2000);
     this.serverService.getServers();
     let root = this;
     setTimeout(function(){
