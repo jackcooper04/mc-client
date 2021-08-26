@@ -7,6 +7,9 @@ const Gamedig = require('gamedig');
 const Rcon = require('modern-rcon');
 const homedir = require('os').homedir();
 const { exec } = require("child_process");
+const getRootDir = () => path.parse(process.cwd()).root;
+/^([^\\/]*[\\/]).*/.test(process.cwd())
+var root = RegExp.$1;
 
 //Import Files
 
@@ -29,7 +32,17 @@ var status =  {
   "version":"",
   "max":""
 
-}
+};
+var dependents = {
+  "java":{
+    "found":false,
+    "download":"https://www.java.com/en/download/"
+  },
+  "jdk":{
+    "found":false,
+    "download":"https://www.oracle.com/uk/java/technologies/javase-jdk16-downloads.html"
+  }
+};
 const rcon = new Rcon('localhost','**58powerTHINKheight42**');
 console.log(path.join(homedir,'Documents','MC_Server_Files','server'))
 //Directory Checks
@@ -52,8 +65,15 @@ if (!fs.existsSync(path.join(homedir,'Documents','MC_Server_Files','server_files
 };
 if (!fs.existsSync(path.join(homedir,'Documents','MC_Server_Files','configs','server.json'))){
   fs.writeFileSync(path.join(homedir,'Documents','MC_Server_Files','configs','server.json'), '[]');
-}
+};
+if (fs.existsSync(path.join(root, 'ProgramData','Microsoft','Windows','Start Menu','Programs','Java'))){
+  dependents.java.found = true;
+};
+if (fs.existsSync(path.join(root, 'ProgramData','Microsoft','Windows','Start Menu','Programs','Java Development Kit'))){
+  dependents.jdk.found = true;
+};
 console.log('DIR Checks Complete');
+console.log(dependents)
 const savedServers = require(path.join(homedir,'Documents','MC_Server_Files','configs','server.json'));
 //Global Variables
 var versions = {};
